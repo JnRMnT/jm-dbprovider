@@ -1,0 +1,19 @@
+{
+  "author": {
+    "name": "JnRMnT",
+    "email": "ozankanik@hotmail.com"
+  },
+  "description": "JMDBProvider",
+  "main": "app.js",
+  "name": "jm-dbprovider",
+  "version": "1.0.0",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "jm-utilities": "^1.0.0",
+    "mongodb": "^2.2.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JnRMnT/jm-dbprovider.git"
+  }
+}
