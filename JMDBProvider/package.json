@@ -9,8 +9,12 @@
   "version": "1.0.0",
   "dependencies": {
     "assert": "^1.4.1",
-    "jm-utilities": "^1.0.0",
-    "mongodb": "^2.2.11"
+    "jm-utilities": "^1.0.3",
+    "mongodb": "^2.2.11",
+    "q": "^1.4.1"
+  },
+  "scripts": {
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
