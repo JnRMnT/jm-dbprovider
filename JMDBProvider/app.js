@@ -1,3 +1,4 @@
+/// <reference path="Scripts/typings/index.d.ts" />
 var mongodb = require('mongodb');
 var JM = require("jm-utilities");
 var q = require("q");
@@ -43,6 +44,26 @@ var JMDbProvider = (function () {
             this.db = undefined;
         }
     };
+    JMDbProvider.prototype.insert = function (collectionName, object) {
+        this.db[collectionName].insert(object);
+    };
+    JMDbProvider.prototype.delete = function (collectionName, deleteCriteria) {
+        this.db[collectionName].delete(deleteCriteria);
+    };
+    JMDbProvider.prototype.find = function (collectionName, limit, findCriteria, sortCriterias) {
+        if (JM.isDefined(sortCriterias)) {
+            var sortObject = {};
+            for (var i = 0; i < sortCriterias.length; i++) {
+                sortObject[sortCriterias[i].fieldName] = sortCriterias[i].direction;
+            }
+            ;
+            return this.db[collectionName].find(findCriteria).limit(limit).sort(sortObject);
+        }
+        else {
+            return this.db[collectionName].find(findCriteria).limit(limit);
+        }
+    };
+    ;
     return JMDbProvider;
 })();
 exports.JMDbProvider = JMDbProvider;

@@ -9,4 +9,17 @@ declare class JMDBProvider {
     private db;
     public connect(userName: string, password: string, databaseName: string, serverName: string): Q.IPromise<any>;
     public close(): void;
+    public insert(collectionName: string, object: any);
+    public delete(collectionName: string, deleteCriteria: any);
+    public find(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): any[] 
+}
+
+declare class SortOption {
+    public fieldName: string;
+    public direction: SortDirection;
+}
+
+declare enum SortDirection {
+    Ascending = -1,
+    Descending = 1
 }
