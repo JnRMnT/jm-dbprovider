@@ -11,6 +11,7 @@ var JMDbProvider = (function () {
     }
     JMDbProvider.prototype.connect = function (userName, password, databaseName, serverName) {
         var deferred = q.defer();
+        var me = this;
         if (!JM.isDefined(this.db)) {
             if (JM.isEmpty(databaseName)) {
                 databaseName = this.defaultDatabaseName;
@@ -23,7 +24,7 @@ var JMDbProvider = (function () {
             var url = 'mongodb://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
             this.MongoClient.connect(url, function (err, database) {
                 if (err == null) {
-                    this.db = database;
+                    me.db = database;
                     console.log("Connected correctly to server.");
                     deferred.resolve();
                 }
@@ -45,22 +46,34 @@ var JMDbProvider = (function () {
         }
     };
     JMDbProvider.prototype.insert = function (collectionName, object) {
-        this.db[collectionName].insert(object);
+        return this.db.collection(collectionName).insertOne(object);
+    };
+    JMDbProvider.prototype.insertMany = function (collectionName, objects) {
+        return this.db.collection(collectionName).insertMany(objects);
+    };
+    JMDbProvider.prototype.deleteMany = function (collectionName, deleteCriteria) {
+        return this.db.collection(collectionName).deleteMany(deleteCriteria);
     };
     JMDbProvider.prototype.delete = function (collectionName, deleteCriteria) {
-        this.db[collectionName].delete(deleteCriteria);
+        return this.db.collection(collectionName).deleteOne(deleteCriteria);
     };
     JMDbProvider.prototype.find = function (collectionName, limit, findCriteria, sortCriterias) {
+        if (!JM.isDefined(limit)) {
+            limit = 0;
+        }
+        if (!JM.isDefined(findCriteria)) {
+            findCriteria = {};
+        }
         if (JM.isDefined(sortCriterias)) {
             var sortObject = {};
             for (var i = 0; i < sortCriterias.length; i++) {
                 sortObject[sortCriterias[i].fieldName] = sortCriterias[i].direction;
             }
             ;
-            return this.db[collectionName].find(findCriteria).limit(limit).sort(sortObject);
+            return this.db.collection(collectionName).find(findCriteria).sort(sortObject).limit(limit).toArray();
         }
         else {
-            return this.db[collectionName].find(findCriteria).limit(limit);
+            return this.db.collection(collectionName).find(findCriteria).limit(limit).toArray();
         }
     };
     ;

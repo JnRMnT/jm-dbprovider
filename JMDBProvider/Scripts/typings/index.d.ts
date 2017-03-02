@@ -9,9 +9,11 @@ declare class JMDBProvider {
     private db;
     public connect(userName: string, password: string, databaseName: string, serverName: string): Q.IPromise<any>;
     public close(): void;
-    public insert(collectionName: string, object: any);
-    public delete(collectionName: string, deleteCriteria: any);
-    public find(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): any[] 
+    public insert(collectionName: string, object: any): PromiseLike<any>;
+    public insertMany(collectionName: string, objects: any[]): PromiseLike<any>;
+    public delete(collectionName: string, deleteCriteria: any): PromiseLike<any>;
+    public deleteMany(collectionName: string, deleteCriteria: any): PromiseLike<any>;
+    public find(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): PromiseLike<any[]>;
 }
 
 declare class SortOption {
@@ -20,6 +22,6 @@ declare class SortOption {
 }
 
 declare enum SortDirection {
-    Ascending = -1,
-    Descending = 1
+    Ascending = 1,
+    Descending = -1
 }

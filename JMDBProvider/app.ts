@@ -2,7 +2,6 @@
 import mongodb = require('mongodb');
 var JM: JMUtilities = require("jm-utilities");
 import q = require("q");
-
 export class JMDbProvider {
     private MongoClient;
 
@@ -18,6 +17,7 @@ export class JMDbProvider {
 
     public connect(userName: string, password: string, databaseName: string, serverName: string): Q.IPromise<any> {
         var deferred = q.defer();
+        var me = this;
 
         if (!JM.isDefined(this.db)) {
             if (JM.isEmpty(databaseName)) {
@@ -34,7 +34,7 @@ export class JMDbProvider {
             var url = 'mongodb://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
             this.MongoClient.connect(url, function (err, database) {
                 if (err == null) {
-                    this.db = database;
+                    me.db = database;
                     console.log("Connected correctly to server.");
                     deferred.resolve();
                 } else {
@@ -55,24 +55,40 @@ export class JMDbProvider {
         }
     }
 
-    public insert(collectionName: string, object: any) {
-        this.db[collectionName].insert(object);
+    public insert(collectionName: string, object: any): PromiseLike<any> {
+        return this.db.collection(collectionName).insertOne(object);
     }
 
-    public delete(collectionName: string, deleteCriteria: any) {
-        this.db[collectionName].delete(deleteCriteria);
+    public insertMany(collectionName: string, objects: any[]): PromiseLike<any> {
+        return this.db.collection(collectionName).insertMany(objects);
     }
 
-    public find(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): any[] {
+    public deleteMany(collectionName: string, deleteCriteria: any): PromiseLike<any> {
+        return this.db.collection(collectionName).deleteMany(deleteCriteria);
+    }
+
+    public delete(collectionName: string, deleteCriteria: any): PromiseLike<any> {
+        return this.db.collection(collectionName).deleteOne(deleteCriteria);
+    }
+
+    public find(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): PromiseLike<any[]> {
+        if (!JM.isDefined(limit)) {
+            limit = 0;
+        }
+
+        if (!JM.isDefined(findCriteria)) {
+            findCriteria = {};
+        }
+
         if (JM.isDefined(sortCriterias)) {
             var sortObject = {};
             for (var i = 0; i < sortCriterias.length; i++) {
                 sortObject[sortCriterias[i].fieldName] = sortCriterias[i].direction;
             };
 
-            return this.db[collectionName].find(findCriteria).limit(limit).sort(sortObject);
+            return this.db.collection(collectionName).find(findCriteria).sort(sortObject).limit(limit).toArray();
         } else {
-            return this.db[collectionName].find(findCriteria).limit(limit);
+            return this.db.collection(collectionName).find(findCriteria).limit(limit).toArray();
         }
     };
 }

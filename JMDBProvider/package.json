@@ -10,7 +10,7 @@
   "dependencies": {
     "assert": "^1.4.1",
     "jm-utilities": "^1.0.3",
-    "mongodb": "^2.2.11",
+    "mongodb": "^2.2.24",
     "q": "^1.4.1"
   },
   "scripts": {
