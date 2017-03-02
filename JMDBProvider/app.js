@@ -1,3 +1,4 @@
+"use strict";
 /// <reference path="Scripts/typings/index.d.ts" />
 var mongodb = require('mongodb');
 var JM = require("jm-utilities");
@@ -78,7 +79,7 @@ var JMDbProvider = (function () {
     };
     ;
     return JMDbProvider;
-})();
+}());
 exports.JMDbProvider = JMDbProvider;
 module.exports = new JMDbProvider();
 //# sourceMappingURL=app.js.map

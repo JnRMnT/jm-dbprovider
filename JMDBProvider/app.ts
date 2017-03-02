@@ -70,8 +70,8 @@ export class JMDbProvider {
     public delete(collectionName: string, deleteCriteria: any): PromiseLike<any> {
         return this.db.collection(collectionName).deleteOne(deleteCriteria);
     }
-
-    public find(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): PromiseLike<any[]> {
+    
+    public find<T>(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): PromiseLike<T[]> {
         if (!JM.isDefined(limit)) {
             limit = 0;
         }
