@@ -6,7 +6,7 @@
   "description": "JMDBProvider",
   "main": "app.js",
   "name": "jm-dbprovider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "assert": "^1.4.1",
     "jm-utilities": "^1.0.3",
