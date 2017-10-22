@@ -2,6 +2,8 @@
 import mongodb = require('mongodb');
 var JM: JMUtilities = require("jm-utilities");
 import q = require("q");
+import mongoose = require("mongoose");
+
 export class JMDbProvider {
     private MongoClient;
 
@@ -70,7 +72,7 @@ export class JMDbProvider {
     public delete(collectionName: string, deleteCriteria: any): PromiseLike<any> {
         return this.db.collection(collectionName).deleteOne(deleteCriteria);
     }
-    
+
     public find<T>(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): PromiseLike<T[]> {
         if (!JM.isDefined(limit)) {
             limit = 0;
@@ -91,6 +93,11 @@ export class JMDbProvider {
             return this.db.collection(collectionName).find(findCriteria).limit(limit).toArray();
         }
     };
+
+    public getModelFromSchema<T extends mongoose.Document>(modelName: string, schema: mongoose.Schema, collection?: string, skipInit?: boolean): mongoose.Model<mongoose.Document> {
+        return mongoose.model(modelName, schema, collection, skipInit);
+    }
 }
 
+export * from 'mongoose';
 module.exports = new JMDbProvider();

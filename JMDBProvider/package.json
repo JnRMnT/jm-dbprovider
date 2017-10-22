@@ -6,11 +6,13 @@
   "description": "JMDBProvider",
   "main": "app.js",
   "name": "jm-dbprovider",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "dependencies": {
+    "@types/mongoose": "^4.7.24",
     "assert": "^1.4.1",
     "jm-utilities": "^1.0.3",
     "mongodb": "^2.2.24",
+    "mongoose": "^4.12.4",
     "q": "^1.4.1"
   },
   "scripts": {
