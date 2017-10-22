@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongodb = require("mongodb");
 var JM = require("jm-utilities");
 var q = require("q");
-var mongoose = require("mongoose");
 var JMDbProvider = (function () {
     function JMDbProvider() {
         this.MongoClient = mongodb.MongoClient;
@@ -83,9 +82,6 @@ var JMDbProvider = (function () {
         }
     };
     ;
-    JMDbProvider.prototype.getModelFromSchema = function (modelName, schema, collection, skipInit) {
-        return mongoose.model(modelName, schema, collection, skipInit);
-    };
     return JMDbProvider;
 }());
 exports.JMDbProvider = JMDbProvider;

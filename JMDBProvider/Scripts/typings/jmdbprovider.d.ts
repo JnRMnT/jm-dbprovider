@@ -10,7 +10,6 @@
     public deleteMany(collectionName: string, deleteCriteria: any): Q.IPromise<any>;
     public find(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): Q.IPromise<any[]>;
     public find<T>(collectionName: string, limit?: number, findCriteria?: any, sortCriterias?: SortOption[]): Q.IPromise<T[]>;
-    public getModelFromSchema<T extends mongoose.Document>(modelName: string, schema: mongoose.Schema, collection?: string, skipInit?: boolean): mongoose.Model<mongoose.Document>;
 }
 
 declare class SortOption {

@@ -2,8 +2,6 @@
 import mongodb = require('mongodb');
 var JM: JMUtilities = require("jm-utilities");
 import q = require("q");
-import mongoose = require("mongoose");
-
 export class JMDbProvider {
     private MongoClient;
 
@@ -93,10 +91,6 @@ export class JMDbProvider {
             return this.db.collection(collectionName).find(findCriteria).limit(limit).toArray();
         }
     };
-
-    public getModelFromSchema<T extends mongoose.Document>(modelName: string, schema: mongoose.Schema, collection?: string, skipInit?: boolean): mongoose.Model<mongoose.Document> {
-        return mongoose.model(modelName, schema, collection, skipInit);
-    }
 }
 
 export * from 'mongoose';
