@@ -1,6 +1,7 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="../Scripts/typings/index.d.ts" />
-var assert = require('assert');
+var assert = require("assert");
 var jmdbProvider = require('../app');
 var SortDirection;
 (function (SortDirection) {
