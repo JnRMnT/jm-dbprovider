@@ -93,5 +93,4 @@ export class JMDbProvider {
     };
 }
 
-export * from 'mongoose';
 module.exports = new JMDbProvider();
