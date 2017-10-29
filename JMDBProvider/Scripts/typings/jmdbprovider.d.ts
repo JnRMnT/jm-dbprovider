@@ -14,7 +14,7 @@
 
 declare class SortOption {
     public fieldName: string;
-    public direction: SortDirection; 
+    public direction: number | SortDirection;
 }
 
 declare enum SortDirection {

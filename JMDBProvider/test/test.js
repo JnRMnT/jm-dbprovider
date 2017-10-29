@@ -3,11 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="../Scripts/typings/index.d.ts" />
 var assert = require("assert");
 var jmdbProvider = require('../app');
-var SortDirection;
-(function (SortDirection) {
-    SortDirection[SortDirection["Ascending"] = 1] = "Ascending";
-    SortDirection[SortDirection["Descending"] = -1] = "Descending";
-})(SortDirection || (SortDirection = {}));
 var testDbConfig = {
     serverName: "ds135039.mlab.com:35039",
     databaseName: "jmtest",
@@ -103,11 +98,11 @@ describe("Main Tests", function () {
                 }
                 return jmdbProvider.insertMany("test", multipleInsert).then(function () {
                     return jmdbProvider.find("test", undefined, undefined, [{
-                            fieldName: "sortId", direction: SortDirection.Descending
+                            fieldName: "sortId", direction: -1 /* Descending */
                         }]).then(function (descendingSortedData) {
                         assert.equal(descendingSortedData[0].sortId, 99, "Descending Sort test failed");
                         return jmdbProvider.find("test", undefined, undefined, [{
-                                fieldName: "sortId", direction: SortDirection.Ascending
+                                fieldName: "sortId", direction: 1 /* Ascending */
                             }]).then(function (ascendingSortedData) {
                             assert.equal(ascendingSortedData[0].sortId, 0, "Ascending Sort test failed");
                             return jmdbProvider.delete("test", undefined).then(function () {

@@ -93,4 +93,9 @@ export class JMDbProvider {
     };
 }
 
+export const enum SortDirection {
+    Ascending = 1,
+    Descending = -1
+}
+
 module.exports = new JMDbProvider();
