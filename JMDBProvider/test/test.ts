@@ -1,7 +1,7 @@
 ﻿/// <reference path="../Scripts/typings/index.d.ts" />
 import assert = require('assert');
-var jmdbProvider: JMDBProvider = require('../app');
 import { SortDirection } from '../app';
+var jmdbProvider: JMDBProvider = require('../app');
 
 var testDbConfig = {
     serverName: "ds135039.mlab.com:35039",

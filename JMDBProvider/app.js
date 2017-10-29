@@ -82,5 +82,11 @@ var JMDbProvider = (function () {
     return JMDbProvider;
 }());
 exports.JMDbProvider = JMDbProvider;
+var SortDirection;
+(function (SortDirection) {
+    SortDirection[SortDirection["Ascending"] = 1] = "Ascending";
+    SortDirection[SortDirection["Descending"] = -1] = "Descending";
+})(SortDirection = exports.SortDirection || (exports.SortDirection = {}));
 module.exports = new JMDbProvider();
+module.exports.SortDirection = SortDirection;
 //# sourceMappingURL=app.js.map
