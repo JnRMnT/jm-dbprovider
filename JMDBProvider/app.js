@@ -43,7 +43,6 @@ var JMDbProvider = /** @class */ (function () {
     ;
     JMDbProvider.prototype.close = function () {
         if (jm_utilities_1.JM.isDefined(this.db)) {
-            this.db.close();
             this.db = undefined;
         }
     };

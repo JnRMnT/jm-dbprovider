@@ -50,7 +50,6 @@ export class JMDbProvider {
 
     public close(): void {
         if (JM.isDefined(this.db)) {
-            this.db.close();
             this.db = undefined;
         }
     }
