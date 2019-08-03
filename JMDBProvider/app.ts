@@ -1,6 +1,6 @@
 ﻿/// <reference path="Scripts/typings/index.d.ts" />
 import mongodb = require('mongodb');
-var JM: JMUtilities = require("jm-utilities");
+import { JM } from "jm-utilities";
 import q = require("q");
 export class JMDbProvider {
     private MongoClient;

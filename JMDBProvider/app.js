@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="Scripts/typings/index.d.ts" />
 var mongodb = require("mongodb");
-var JM = require("jm-utilities");
+var jm_utilities_1 = require("jm-utilities");
 var q = require("q");
-var JMDbProvider = (function () {
+var JMDbProvider = /** @class */ (function () {
     function JMDbProvider() {
         this.MongoClient = mongodb.MongoClient;
         this.defaultServerName = "localhost:27017";
@@ -14,11 +14,11 @@ var JMDbProvider = (function () {
     JMDbProvider.prototype.connect = function (userName, password, databaseName, serverName) {
         var deferred = q.defer();
         var me = this;
-        if (!JM.isDefined(this.db)) {
-            if (JM.isEmpty(databaseName)) {
+        if (!jm_utilities_1.JM.isDefined(this.db)) {
+            if (jm_utilities_1.JM.isEmpty(databaseName)) {
                 databaseName = this.defaultDatabaseName;
             }
-            if (JM.isEmpty(serverName)) {
+            if (jm_utilities_1.JM.isEmpty(serverName)) {
                 serverName = this.defaultServerName;
             }
             userName = encodeURIComponent(userName);
@@ -42,7 +42,7 @@ var JMDbProvider = (function () {
     };
     ;
     JMDbProvider.prototype.close = function () {
-        if (JM.isDefined(this.db)) {
+        if (jm_utilities_1.JM.isDefined(this.db)) {
             this.db.close();
             this.db = undefined;
         }
@@ -60,13 +60,13 @@ var JMDbProvider = (function () {
         return this.db.collection(collectionName).deleteOne(deleteCriteria);
     };
     JMDbProvider.prototype.find = function (collectionName, limit, findCriteria, sortCriterias) {
-        if (!JM.isDefined(limit)) {
+        if (!jm_utilities_1.JM.isDefined(limit)) {
             limit = 0;
         }
-        if (!JM.isDefined(findCriteria)) {
+        if (!jm_utilities_1.JM.isDefined(findCriteria)) {
             findCriteria = {};
         }
-        if (JM.isDefined(sortCriterias)) {
+        if (jm_utilities_1.JM.isDefined(sortCriterias)) {
             var sortObject = {};
             for (var i = 0; i < sortCriterias.length; i++) {
                 sortObject[sortCriterias[i].fieldName] = sortCriterias[i].direction;
