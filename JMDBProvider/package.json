@@ -6,7 +6,7 @@
   "description": "JMDBProvider",
   "main": "app.js",
   "name": "jm-dbprovider",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "dependencies": {
     "assert": "^1.5.0",
     "jm-utilities": "^1.1.4",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/mongodb": "^3.1.31",
-    "@types/q": "^1.5.2"
+    "@types/q": "^1.5.2",
+    "mocha": "^6.2.0"
   }
 }
