@@ -11,13 +11,14 @@ var testDbConfig = {
 };
 
 describe("Main Tests", () => {
-    it("DB Connectivity Test", () => {
+    it("DB Connectivity Test", (done) => {
         try {
-            return jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
+            jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
                 assert.ok(true, "Database connection successful");
                 jmdbProvider.close();
+                done();
             }, function () {
-                assert.ok(false, "Database connection failed");
+                done("Database connection failed");
             });
         } catch (ex) {
             jmdbProvider.close();
@@ -25,9 +26,9 @@ describe("Main Tests", () => {
         }
     });
 
-    it("Insert - Delete Test", () => {
+    it("Insert - Delete Test", (done) => {
         try {
-            return jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
+            jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
                 return jmdbProvider.insert("test", { testProperty: true }).then(function () {
                     return jmdbProvider.find("test", undefined, { testProperty: true }).then(function (data) {
                         assert.equal(data.length, 1, "Insert operation failed");
@@ -35,25 +36,26 @@ describe("Main Tests", () => {
                             return jmdbProvider.find("test").then(function (data) {
                                 assert.equal(data.length, 0, "Delete operation failed");
                                 jmdbProvider.close();
+                                done();
                             });
                         }, function () {
-                            assert.ok(false, "Delete operation rejected");
+                            done("Delete operation rejected");
                         });
                     }, function () {
-                        assert.ok(false, "Insert operation rejected");
+                        done("Insert operation rejected");
                     });
                 });
             }, function () {
-                assert.ok(false, "Database connection failed");
+                done("Database connection failed");
             });
         } catch (ex) {
-            assert.ok(false, "Insert-Delete operation failed");
+            done("Insert-Delete operation failed");
         }
     });
 
-    it("Limit Test", () => {
+    it("Limit Test", (done) => {
         try {
-            return jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
+            jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
                 var insertObjects = [];
                 for (var i = 0; i < 100; i++) {
                     insertObjects.push({ testProperty: true });
@@ -67,32 +69,43 @@ describe("Main Tests", () => {
                                 return jmdbProvider.find("test").then(function (data) {
                                     assert.equal(data.length, 0, "Delete operation failed");
                                     jmdbProvider.close();
+                                    done();
                                 }, function () {
-                                    assert.ok(false, "find after delete operation rejected");
+                                    done("find after delete operation rejected");
                                 });
                             }, function () {
-                                assert.ok(false, "Delete operation rejected");
+                                done("Delete operation rejected");
                             });
                         }, function () {
-                            assert.ok(false, "Limited Find operation rejected");
+                            done("Limited Find operation rejected");
                         });
                     }, function () {
-                        assert.ok(false, "Find operation rejected");
+                        done("Find operation rejected");
                     });
                 }, function () {
-                    assert.ok(false, "Insert operation rejected");
+                    done("Insert operation rejected");
                 });
             }, function () {
-                assert.ok(false, "Database connection failed");
+                done("Database connection failed");
             });
         } catch (ex) {
-            assert.ok(false, "Limit test failed");
+            done("Limit test failed");
         }
     });
 
-    it("Sorting Test", () => {
+    it("Sorting Test", (done) => {
         try {
-            return jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
+            jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
+                let finishTest = function (error?: string) {
+                    jmdbProvider.deleteMany("test", undefined).then(function () {
+                        jmdbProvider.close();
+                        done(error);
+                    }, function () {
+                        jmdbProvider.close();
+                        done("Cleanup error");
+                    });
+                }
+
                 var multipleInsert = [];
                 for (var i = 0; i < 100; i++) {
                     multipleInsert.push({ sortId: i });
@@ -108,25 +121,24 @@ describe("Main Tests", () => {
                         }]).then(function (ascendingSortedData) {
                             assert.equal(ascendingSortedData[0].sortId, 0, "Ascending Sort test failed");
                             return jmdbProvider.delete("test", undefined).then(function () {
-                                jmdbProvider.close();
+                                finishTest();
                             }, function () {
-                                assert.ok(false, "Delete all operation failed");
+                                finishTest("Delete all operation failed");
                             });
                         }, function () {
-                            assert.ok(false, "Find ascending sorted operation failed");
+                            finishTest("Find ascending sorted operation failed");
                         });
                     }, function () {
-                        assert.ok(false, "Find descending sorted operation failed");
+                        finishTest("Find descending sorted operation failed");
                     });
                 }, function () {
-                    assert.ok(false, "Multiple insertion operation failed");
+                    finishTest("Multiple insertion operation failed");
                 });
             }, function () {
-                assert.ok(false, "Database connection failed");
+                done("Database connection failed");
             });
         } catch (ex) {
             assert.ok(false, "Sort test failed");
         }
     });
 });
- 
