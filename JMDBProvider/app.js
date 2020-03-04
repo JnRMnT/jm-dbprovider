@@ -24,9 +24,9 @@ var JMDbProvider = /** @class */ (function () {
             userName = encodeURIComponent(userName);
             password = encodeURIComponent(password);
             var url = 'mongodb://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
-            this.MongoClient.connect(url, function (err, database) {
+            this.MongoClient.connect(url, function (err, client) {
                 if (err == null) {
-                    me.db = database;
+                    me.db = client.db(databaseName);
                     console.log("Connected correctly to server.");
                     deferred.resolve();
                 }

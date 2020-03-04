@@ -39,18 +39,20 @@ describe("Main Tests", function () {
                                 done();
                             });
                         }, function () {
-                            done("Delete operation rejected");
+                            done(new Error("Delete operation rejected"));
                         });
                     }, function () {
-                        done("Insert operation rejected");
+                        done(new Error("Insert operation rejected"));
                     });
+                }, function (error) {
+                    done(new Error("Insertion failed: " + error.toString()));
                 });
             }, function () {
-                done("Database connection failed");
+                done(new Error("Database connection failed"));
             });
         }
         catch (ex) {
-            done("Insert-Delete operation failed");
+            done(new Error("Insert-Delete operation failed: " + ex.toString()));
         }
     });
     it("Limit Test", function (done) {
@@ -71,26 +73,26 @@ describe("Main Tests", function () {
                                     jmdbProvider.close();
                                     done();
                                 }, function () {
-                                    done("find after delete operation rejected");
+                                    done(new Error("find after delete operation rejected"));
                                 });
                             }, function () {
-                                done("Delete operation rejected");
+                                done(new Error("Delete operation rejected"));
                             });
                         }, function () {
-                            done("Limited Find operation rejected");
+                            done(new Error("Limited Find operation rejected"));
                         });
                     }, function () {
-                        done("Find operation rejected");
+                        done(new Error("Find operation rejected"));
                     });
                 }, function () {
-                    done("Insert operation rejected");
+                    done(new Error("Insert operation rejected"));
                 });
             }, function () {
-                done("Database connection failed");
+                done(new Error("Database connection failed"));
             });
         }
         catch (ex) {
-            done("Limit test failed");
+            done(new Error("Limit test failed"));
         }
     });
     it("Sorting Test", function (done) {
@@ -102,7 +104,7 @@ describe("Main Tests", function () {
                         done(error);
                     }, function () {
                         jmdbProvider.close();
-                        done("Cleanup error");
+                        done(new Error("Cleanup error"));
                     });
                 };
                 var multipleInsert = [];
