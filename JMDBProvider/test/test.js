@@ -5,10 +5,10 @@ var assert = require("assert");
 var app_1 = require("../app");
 var jmdbProvider = require('../app');
 var testDbConfig = {
-    serverName: "ds135039.mlab.com:35039",
+    serverName: "ozan-kanik.yge95.mongodb.net",
     databaseName: "jmtest",
-    userName: "jm-test",
-    password: "123456"
+    userName: "jmtest",
+    password: "jmtest"
 };
 describe("Main Tests", function () {
     it("DB Connectivity Test", function (done) {

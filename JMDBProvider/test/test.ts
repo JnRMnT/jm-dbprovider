@@ -4,10 +4,10 @@ import { SortDirection } from '../app';
 var jmdbProvider: JMDBProvider = require('../app');
 
 var testDbConfig = {
-    serverName: "ds135039.mlab.com:35039",
+    serverName: "ozan-kanik.yge95.mongodb.net",
     databaseName: "jmtest",
-    userName: "jm-test",
-    password: "123456"
+    userName: "jmtest",
+    password: "jmtest"
 };
 
 describe("Main Tests", () => {

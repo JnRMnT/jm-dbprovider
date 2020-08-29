@@ -24,7 +24,7 @@ var JMDbProvider = /** @class */ (function () {
             }
             userName = encodeURIComponent(userName);
             password = encodeURIComponent(password);
-            var url = 'mongodb://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
+            var url = 'mongodb+srv://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
             var options = {
                 useUnifiedTopology: true
             };

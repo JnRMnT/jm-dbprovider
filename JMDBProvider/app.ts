@@ -31,7 +31,7 @@ export class JMDbProvider {
             userName = encodeURIComponent(userName);
             password = encodeURIComponent(password);
 
-            var url = 'mongodb://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
+            var url = 'mongodb+srv://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
             var options: mongodb.MongoClientOptions = {
                 useUnifiedTopology: true
             };
