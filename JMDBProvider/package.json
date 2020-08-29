@@ -6,11 +6,11 @@
   "description": "JMDBProvider",
   "main": "app.js",
   "name": "jm-dbprovider",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "dependencies": {
     "assert": "^1.5.0",
-    "jm-utilities": "^1.1.5",
-    "mongodb": "^3.5.4",
+    "jm-utilities": "^1.1.8",
+    "mongodb": "^3.6.0",
     "q": "^1.5.1"
   },
   "files": [
@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/mongodb": "^3.5.1",
-    "@types/q": "^1.5.2",
-    "mocha": "^6.2.2"
+    "@types/mongodb": "^3.5.26",
+    "@types/q": "^1.5.4",
+    "mocha": "^6.2.3"
   }
 }

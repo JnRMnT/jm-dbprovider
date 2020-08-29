@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SortDirection = exports.JMDbProvider = void 0;
 /// <reference path="Scripts/typings/index.d.ts" />
 var mongodb = require("mongodb");
 var jm_utilities_1 = require("jm-utilities");
@@ -24,7 +25,10 @@ var JMDbProvider = /** @class */ (function () {
             userName = encodeURIComponent(userName);
             password = encodeURIComponent(password);
             var url = 'mongodb://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
-            this.MongoClient.connect(url, function (err, client) {
+            var options = {
+                useUnifiedTopology: true
+            };
+            this.MongoClient.connect(url, options, function (err, client) {
                 if (err == null) {
                     me.db = client.db(databaseName);
                     console.log("Connected correctly to server.");

@@ -32,7 +32,10 @@ export class JMDbProvider {
             password = encodeURIComponent(password);
 
             var url = 'mongodb://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
-            this.MongoClient.connect(url, function (err, client) {
+            var options: mongodb.MongoClientOptions = {
+                useUnifiedTopology: true
+            };
+            this.MongoClient.connect(url, options, function(err, client) {
                 if (err == null) {
                     me.db = client.db(databaseName);
                     console.log("Connected correctly to server.");
