@@ -31,6 +31,6 @@
     "@types/mocha": "^5.2.7",
     "@types/mongodb": "^3.5.26",
     "@types/q": "^1.5.4",
-    "mocha": "^6.2.3"
+    "mocha": "^10.2.0"
   }
 }
