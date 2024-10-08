@@ -8,6 +8,7 @@ steps:
 - task: UseNode@1
   inputs:
     checkLatest: true
+    version: "21.x"
   displayName: "Install NodeJs"
 - task: Npm@1
   inputs:
