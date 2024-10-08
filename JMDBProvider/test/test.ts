@@ -1,7 +1,6 @@
 ﻿/// <reference path="../Scripts/typings/index.d.ts" />
-import assert = require('assert');
-import { SortDirection } from '../app';
-var jmdbProvider: JMDBProvider = require('../app');
+import assert from 'assert';
+import { SortDirection, JMDbProvider } from '../app.js';
 
 var testDbConfig = {
     serverName: "ozan-kanik.yge95.mongodb.net",
@@ -10,6 +9,7 @@ var testDbConfig = {
     password: "jmtest"
 };
 
+const jmdbProvider = new JMDbProvider();
 describe("Main Tests", () => {
     it("DB Connectivity Test", (done) => {
         try {
@@ -17,7 +17,8 @@ describe("Main Tests", () => {
                 assert.ok(true, "Database connection successful");
                 jmdbProvider.close();
                 done();
-            }, function () {
+            }, function (e) {
+                console.error(e);
                 done("Database connection failed");
             });
         } catch (ex) {
@@ -29,28 +30,33 @@ describe("Main Tests", () => {
     it("Insert - Delete Test", (done) => {
         try {
             jmdbProvider.connect(testDbConfig.userName, testDbConfig.password, testDbConfig.databaseName, testDbConfig.serverName).then(function () {
-                return jmdbProvider.insert("test", { testProperty: true }).then(function () {
-                    return jmdbProvider.find("test", undefined, { testProperty: true }).then(function (data) {
+                jmdbProvider.insert("test", { testProperty: true }).then(function () {
+                    jmdbProvider.find("test", undefined, { testProperty: true }).then(function (data) {
                         assert.equal(data.length, 1, "Insert operation failed");
-                        return jmdbProvider.deleteMany("test", { testProperty: true }).then(function () {
-                            return jmdbProvider.find("test").then(function (data) {
+                        jmdbProvider.deleteMany("test", { testProperty: true }).then(function () {
+                            jmdbProvider.find("test").then(function (data) {
                                 assert.equal(data.length, 0, "Delete operation failed");
                                 jmdbProvider.close();
                                 done();
                             });
-                        }, function () {
+                        }, function (e) {
+                            console.error(e);
                             done(new Error("Delete operation rejected"));
                         });
-                    }, function () {
+                    }, function (e) {
+                        console.error(e);
                         done(new Error("Insert operation rejected"));
                     });
                 }, function (error) {
+                    console.error(error);
                     done(new Error("Insertion failed: " + error.toString()));
                 });
-            }, function () {
+            }, function (error) {
+                console.error(error);
                 done(new Error("Database connection failed"));
             });
         } catch (ex) {
+            console.error(ex.toString());
             done(new Error("Insert-Delete operation failed: " + ex.toString()));
         }
     });
@@ -62,13 +68,13 @@ describe("Main Tests", () => {
                 for (var i = 0; i < 100; i++) {
                     insertObjects.push({ testProperty: true });
                 }
-                return jmdbProvider.insertMany("test", insertObjects).then(function () {
-                    return jmdbProvider.find("test").then(function (data) {
+                jmdbProvider.insertMany("test", insertObjects).then(function () {
+                    jmdbProvider.find("test").then(function (data) {
                         assert.equal(data.length, 100, "Insert operation failed");
-                        return jmdbProvider.find("test", 10).then(function (data) {
+                        jmdbProvider.find("test", 10).then(function (data) {
                             assert.equal(data.length, 10, "Limit operation failed");
-                            return jmdbProvider.deleteMany("test", undefined).then(function () {
-                                return jmdbProvider.find("test").then(function (data) {
+                            jmdbProvider.deleteMany("test", undefined).then(function () {
+                                jmdbProvider.find("test").then(function (data) {
                                     assert.equal(data.length, 0, "Delete operation failed");
                                     jmdbProvider.close();
                                     done();
@@ -113,16 +119,16 @@ describe("Main Tests", () => {
                     multipleInsert.push({ sortId: i });
                 }
 
-                return jmdbProvider.insertMany("test", multipleInsert).then(function () {
-                    return jmdbProvider.find("test", undefined, undefined, [{
+                jmdbProvider.insertMany("test", multipleInsert).then(function () {
+                    jmdbProvider.find("test", undefined, undefined, [{
                         fieldName: "sortId", direction: SortDirection.Descending
                     }]).then(function (descendingSortedData) {
-                        assert.equal(descendingSortedData[0].sortId, 99, "Descending Sort test failed");
-                        return jmdbProvider.find("test", undefined, undefined, [{
+                        assert.equal((descendingSortedData[0] as any).sortId, 99, "Descending Sort test failed");
+                        jmdbProvider.find("test", undefined, undefined, [{
                             fieldName: "sortId", direction: SortDirection.Ascending
                         }]).then(function (ascendingSortedData) {
-                            assert.equal(ascendingSortedData[0].sortId, 0, "Ascending Sort test failed");
-                            return jmdbProvider.delete("test", undefined).then(function () {
+                            assert.equal((ascendingSortedData[0] as any).sortId, 0, "Ascending Sort test failed");
+                            jmdbProvider.delete("test", undefined).then(function () {
                                 finishTest();
                             }, function () {
                                 finishTest("Delete all operation failed");

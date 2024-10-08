@@ -1,7 +1,6 @@
 ﻿/// <reference path="Scripts/typings/index.d.ts" />
-import mongodb = require('mongodb');
+import mongodb from 'mongodb';
 import { JM } from "jm-utilities";
-import q = require("q");
 export class JMDbProvider {
     private MongoClient;
 
@@ -11,44 +10,43 @@ export class JMDbProvider {
 
     constructor() {
         this.MongoClient = mongodb.MongoClient;
-        this.defaultServerName = "localhost:27017";;
+        this.defaultServerName = "localhost:27017";
         this.defaultDatabaseName = "test";
     }
 
-    public connect(userName: string, password: string, databaseName: string, serverName: string): Q.IPromise<any> {
-        var deferred = q.defer();
+    public connect(userName: string, password: string, databaseName: string, serverName: string): Promise<void> {
         var me = this;
-
-        if (!JM.isDefined(this.db)) {
-            if (JM.isEmpty(databaseName)) {
-                databaseName = this.defaultDatabaseName;
-            }
-
-            if (JM.isEmpty(serverName)) {
-                serverName = this.defaultServerName;
-            }
-
-            userName = encodeURIComponent(userName);
-            password = encodeURIComponent(password);
-
-            var url = 'mongodb+srv://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
-            var options: mongodb.MongoClientOptions = {
-                useUnifiedTopology: true
-            };
-            this.MongoClient.connect(url, options, function(err, client) {
-                if (err == null) {
-                    me.db = client.db(databaseName);
-                    console.log("Connected correctly to server.");
-                    deferred.resolve();
-                } else {
-                    deferred.reject(err);
+        var promise = new Promise<void>((resolve, reject) => {
+            if (!JM.isDefined(me.db)) {
+                if (JM.isEmpty(databaseName)) {
+                    databaseName = me.defaultDatabaseName;
                 }
-            });
-        } else {
-            deferred.resolve();
-        }
 
-        return deferred.promise;
+                if (JM.isEmpty(serverName)) {
+                    serverName = me.defaultServerName;
+                }
+
+                userName = encodeURIComponent(userName);
+                password = encodeURIComponent(password);
+
+                var url = 'mongodb+srv://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
+                var options: mongodb.MongoClientOptions = {
+                    useUnifiedTopology: true
+                };
+                me.MongoClient.connect(url, options, function (err, client) {
+                    if (err == null) {
+                        me.db = client.db(databaseName);
+                        console.log("Connected correctly to server.");
+                        resolve();
+                    } else {
+                        reject(err);
+                    }
+                });
+            } else {
+                resolve();
+            }
+        });
+        return promise;
     };
 
     public close(): void {
@@ -100,5 +98,4 @@ export enum SortDirection {
     Descending = -1
 }
 
-module.exports = new JMDbProvider();
-module.exports.SortDirection = SortDirection;
+export default new JMDbProvider();

@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES2015", // Compile to a modern ECMAScript version that supports ES modules
+    "module": "ES2015", // Use ES module syntax for module code generation,
+    "moduleResolution": "Node",
+    "esModuleInterop": true // Enables default imports from modules with no default export
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

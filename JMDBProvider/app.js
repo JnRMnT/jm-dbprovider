@@ -1,75 +1,71 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SortDirection = exports.JMDbProvider = void 0;
 /// <reference path="Scripts/typings/index.d.ts" />
-var mongodb = require("mongodb");
-var jm_utilities_1 = require("jm-utilities");
-var q = require("q");
-var JMDbProvider = /** @class */ (function () {
-    function JMDbProvider() {
+import mongodb from 'mongodb';
+import { JM } from "jm-utilities";
+export class JMDbProvider {
+    constructor() {
         this.MongoClient = mongodb.MongoClient;
         this.defaultServerName = "localhost:27017";
-        ;
         this.defaultDatabaseName = "test";
     }
-    JMDbProvider.prototype.connect = function (userName, password, databaseName, serverName) {
-        var deferred = q.defer();
+    connect(userName, password, databaseName, serverName) {
         var me = this;
-        if (!jm_utilities_1.JM.isDefined(this.db)) {
-            if (jm_utilities_1.JM.isEmpty(databaseName)) {
-                databaseName = this.defaultDatabaseName;
-            }
-            if (jm_utilities_1.JM.isEmpty(serverName)) {
-                serverName = this.defaultServerName;
-            }
-            userName = encodeURIComponent(userName);
-            password = encodeURIComponent(password);
-            var url = 'mongodb+srv://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
-            var options = {
-                useUnifiedTopology: true
-            };
-            this.MongoClient.connect(url, options, function (err, client) {
-                if (err == null) {
-                    me.db = client.db(databaseName);
-                    console.log("Connected correctly to server.");
-                    deferred.resolve();
+        var promise = new Promise((resolve, reject) => {
+            if (!JM.isDefined(me.db)) {
+                if (JM.isEmpty(databaseName)) {
+                    databaseName = me.defaultDatabaseName;
                 }
-                else {
-                    deferred.reject(err);
+                if (JM.isEmpty(serverName)) {
+                    serverName = me.defaultServerName;
                 }
-            });
-        }
-        else {
-            deferred.resolve();
-        }
-        return deferred.promise;
-    };
+                userName = encodeURIComponent(userName);
+                password = encodeURIComponent(password);
+                var url = 'mongodb+srv://' + userName + ':' + password + '@' + serverName + '/' + databaseName;
+                var options = {
+                    useUnifiedTopology: true
+                };
+                me.MongoClient.connect(url, options, function (err, client) {
+                    if (err == null) {
+                        me.db = client.db(databaseName);
+                        console.log("Connected correctly to server.");
+                        resolve();
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
+            }
+            else {
+                resolve();
+            }
+        });
+        return promise;
+    }
     ;
-    JMDbProvider.prototype.close = function () {
-        if (jm_utilities_1.JM.isDefined(this.db)) {
+    close() {
+        if (JM.isDefined(this.db)) {
             this.db = undefined;
         }
-    };
-    JMDbProvider.prototype.insert = function (collectionName, object) {
+    }
+    insert(collectionName, object) {
         return this.db.collection(collectionName).insertOne(object);
-    };
-    JMDbProvider.prototype.insertMany = function (collectionName, objects) {
+    }
+    insertMany(collectionName, objects) {
         return this.db.collection(collectionName).insertMany(objects);
-    };
-    JMDbProvider.prototype.deleteMany = function (collectionName, deleteCriteria) {
+    }
+    deleteMany(collectionName, deleteCriteria) {
         return this.db.collection(collectionName).deleteMany(deleteCriteria);
-    };
-    JMDbProvider.prototype.delete = function (collectionName, deleteCriteria) {
+    }
+    delete(collectionName, deleteCriteria) {
         return this.db.collection(collectionName).deleteOne(deleteCriteria);
-    };
-    JMDbProvider.prototype.find = function (collectionName, limit, findCriteria, sortCriterias) {
-        if (!jm_utilities_1.JM.isDefined(limit)) {
+    }
+    find(collectionName, limit, findCriteria, sortCriterias) {
+        if (!JM.isDefined(limit)) {
             limit = 0;
         }
-        if (!jm_utilities_1.JM.isDefined(findCriteria)) {
+        if (!JM.isDefined(findCriteria)) {
             findCriteria = {};
         }
-        if (jm_utilities_1.JM.isDefined(sortCriterias)) {
+        if (JM.isDefined(sortCriterias)) {
             var sortObject = {};
             for (var i = 0; i < sortCriterias.length; i++) {
                 sortObject[sortCriterias[i].fieldName] = sortCriterias[i].direction;
@@ -80,16 +76,12 @@ var JMDbProvider = /** @class */ (function () {
         else {
             return this.db.collection(collectionName).find(findCriteria).limit(limit).toArray();
         }
-    };
+    }
     ;
-    return JMDbProvider;
-}());
-exports.JMDbProvider = JMDbProvider;
-var SortDirection;
+}
+export var SortDirection;
 (function (SortDirection) {
     SortDirection[SortDirection["Ascending"] = 1] = "Ascending";
     SortDirection[SortDirection["Descending"] = -1] = "Descending";
-})(SortDirection = exports.SortDirection || (exports.SortDirection = {}));
-module.exports = new JMDbProvider();
-module.exports.SortDirection = SortDirection;
-//# sourceMappingURL=app.js.map
+})(SortDirection || (SortDirection = {}));
+export default new JMDbProvider();
